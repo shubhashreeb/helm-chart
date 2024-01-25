@@ -528,7 +528,7 @@ persistentVolumeClaimRetentionPolicy:
 service:
   ## @param service.type Kubernetes Service type
   ##
-  type: ClusterIP
+  type: NodePort #ClusterIP
   ## @param service.enabled create second service if equal true
   ##
   enabled: true
@@ -551,8 +551,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    client: ""
-    peer: ""
+    client: "32379"
+    peer: "32380"
     metrics: ""
   ## @param service.clientPortNameOverride etcd client port name override
   ##
