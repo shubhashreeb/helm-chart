@@ -497,7 +497,7 @@ alertmanager:
   service:
     ## @param alertmanager.service.type Alertmanager service type
     ##
-    type: LoadBalancer
+    type: NodePort #LoadBalancer
     ## @param alertmanager.service.ports.http Alertmanager service HTTP port
     ## @param alertmanager.service.ports.cluster Alertmanager cluster HA port
     ##
@@ -509,7 +509,7 @@ alertmanager:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http: ""
+      http: 30094""
     ## @param alertmanager.service.clusterIP Alertmanager service Cluster IP
     ## e.g.:
     ## clusterIP: None

@@ -122,6 +122,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "keycloak.secretName" . }}
                   key: {{ include "keycloak.secretKey" . }}
+            - name: "PROXY_ADDRESS_FORWARDING"
+              value: "true"
+            - name: "KEYCLOAK_ADMIN_URL"
+              value: "https://mycloak.io/auth/realms/master/admin/"
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:

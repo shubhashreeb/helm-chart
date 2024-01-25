@@ -551,8 +551,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    client: "32379"
-    peer: "32380"
+    client: "32179"
+    peer: "32180"
     metrics: ""
   ## @param service.clientPortNameOverride etcd client port name override
   ##
