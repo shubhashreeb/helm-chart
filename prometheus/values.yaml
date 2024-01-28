@@ -509,7 +509,7 @@ alertmanager:
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
-      http: 30094""
+      http: "30094"
     ## @param alertmanager.service.clusterIP Alertmanager service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1395,7 +1395,7 @@ server:
   service:
     ## @param server.service.type Prometheus service type
     ##
-    type: LoadBalancer
+    type: NodePort #LoadBalancer
     ## @param server.service.ports.http Prometheus service HTTP port
     ##
     ports:
