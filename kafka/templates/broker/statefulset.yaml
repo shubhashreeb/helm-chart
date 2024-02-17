@@ -210,6 +210,10 @@ spec:
                   key: controller-password
             {{- end }}
             {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            # - name: KAFKA_ADVERTISED_LISTENERS
+            #   value: INTERNAL://192.168.86.211:9092,EXTERNAL://192.168.86.211:32092,DOCKER://host.docker.internal:29092
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
             - name: KAFKA_CONTROLLER_CLIENT_ID
               value: {{ .Values.sasl.controller.clientId | quote }}
             - name: KAFKA_CONTROLLER_CLIENT_SECRET

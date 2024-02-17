@@ -177,6 +177,8 @@ listeners:
     protocol: SASL_PLAINTEXT
     name: EXTERNAL
     sslClientAuth: ""
+    accessMethod: NodePort
+    # hostnameOverride: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local
   ## @param listeners.extraListeners Array of listener objects to be appended to already existing listeners
   ## E.g.
   ## extraListeners:
@@ -185,7 +187,22 @@ listeners:
   ##    protocol: SASL_PLAINTEXT
   ##    sslClientAuth: ""
   ##
+  listenersConfig:
+    externalListeners:
+      - type: "plaintext"
+        name: "external1"
+        externalStartingPort: 32000
+        containerPort: 9094
+        accessMethod: NodePort
+
   extraListeners: []
+      # - type: "plaintext"
+      #   name: "external1"
+      #   externalStartingPort: 32092
+      #   containerPort: 9094
+      #   accessMethod: NodePort
+      # hostnameOverride: 192.168.86.211:32092 #kafka-controller-1.kafka-controller-headless.default.svc.cluster.local
+
   ## NOTE: If set, below values will override configuration set using the above values (extraListeners.*, controller.*, interbroker.*, client.* and external.*)
   ## @param listeners.overrideListeners Overrides the Kafka 'listeners' configuration setting.
   ## @param listeners.advertisedListeners Overrides the Kafka 'advertised.listener' configuration setting.
@@ -193,6 +210,7 @@ listeners:
   overrideListeners: ""
   advertisedListeners: ""
   securityProtocolMap: ""
+  
 
 ## @section Kafka SASL parameters
 ## Kafka SASL settings for authentication, required if SASL_PLAINTEXT or SASL_SSL listeners are configured
@@ -469,7 +487,7 @@ controller:
   ## @param controller.replicaCount Number of Kafka controller-eligible nodes
   ## Ignore this section if running in Zookeeper mode.
   ##
-  replicaCount: 3
+  replicaCount: 1
   ## @param controller.controllerOnly If set to true, controller nodes will be deployed as dedicated controllers, instead of controller+broker processes.
   ##
   controllerOnly: false
@@ -1268,7 +1286,7 @@ broker:
 service:
   ## @param service.type Kubernetes Service type
   ##
-  type: ClusterIP
+  type: NodePort #ClusterIP
   ## @param service.ports.client Kafka svc port for client connections
   ## @param service.ports.controller Kafka svc port for controller connections. It is used if "kraft.enabled: true"
   ## @param service.ports.interbroker Kafka svc port for inter-broker connections
@@ -1287,8 +1305,8 @@ service:
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    client: ""
-    external: ""
+    client: "32092"
+    external: "32093"
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -1349,7 +1367,7 @@ service:
 externalAccess:
   ## @param externalAccess.enabled Enable Kubernetes external cluster access to Kafka brokers
   ##
-  enabled: false
+  enabled: true
   ## External IPs auto-discovery configuration
   ## An init container is used to auto-detect LB IPs or node ports by querying the K8s API
   ## Note: RBAC might be required
@@ -1357,7 +1375,7 @@ externalAccess:
   autoDiscovery:
     ## @param externalAccess.autoDiscovery.enabled Enable using an init container to auto-detect external IPs/ports by querying the K8s API
     ##
-    enabled: false
+    enabled: true
     ## Bitnami Kubectl image
     ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
     ## @param externalAccess.autoDiscovery.image.registry [default: REGISTRY_NAME] Init container auto-discovery image registry
@@ -1431,7 +1449,7 @@ externalAccess:
     service:
       ## @param externalAccess.controller.service.type Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP
       ##
-      type: LoadBalancer
+      type: NodePort #LoadBalancer
       ## @param externalAccess.controller.service.ports.external Kafka port used for external access when service type is LoadBalancer
       ##
       ports:
@@ -1714,7 +1732,7 @@ rbac:
   ## binding Kafka ServiceAccount to a role
   ## that allows Kafka pods querying the K8s API
   ##
-  create: false
+  create: true
 
 ## @section Metrics parameters
 ##
