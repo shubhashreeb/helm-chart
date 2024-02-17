@@ -279,3 +279,38 @@ To access Alertmanager from outside the cluster execute the following commands:
     export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services prometheus-alertmanager)
     export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "Alertmanager URL: http://$NODE_IP:$NODE_PORT/"
+
+#
+NAME: keycloak
+LAST DEPLOYED: Sun Jan 28 09:38:15 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: keycloak
+CHART VERSION: 18.2.1
+APP VERSION: 23.0.4
+
+** Please be patient while the chart is being deployed **
+
+Keycloak can be accessed through the following DNS name from within your cluster:
+
+    keycloak.default.svc.cluster.local (port 80)
+
+To access Keycloak from outside the cluster execute the following commands:
+
+1. Get the Keycloak URL by running these commands:
+
+    export HTTP_NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[?(@.name=='http')].nodePort}" services keycloak)
+    export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+
+    echo "http://${NODE_IP}:${HTTP_NODE_PORT}/"
+
+2. Access Keycloak using the obtained URL.
+3. Access the Administration Console using the following credentials:
+
+  echo Username: admin
+  echo Password: $(kubectl get secret --namespace default keycloak -o jsonpath="{.data.admin-password}" | base64 -d)
+WARNING: Rolling tag detected (bitnami/keycloak:latest), please note that it is strongly recommended to avoid using rolling tags in a production environment.
++info https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/
